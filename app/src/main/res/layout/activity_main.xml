@@ -8,10 +8,53 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jasonbutwell.whatstheweather.MainActivity">
+    tools:context="com.jasonbutwell.whatstheweather.MainActivity"
+    android:background="@drawable/background">
 
     <TextView
+        android:text="Please Enter a city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:id="@+id/textView"
+        android:textStyle="normal|bold"
+        android:textSize="24dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_blue_bright" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/editTextCity"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColorLink="@android:color/holo_blue_light" />
+
+    <Button
+        android:text="What's the Weather?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:id="@+id/buttonGetWeather"
+        android:textSize="14dp"
+        android:layout_below="@+id/editTextCity"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:gravity="fill"
+        android:layout_below="@+id/buttonGetWeather"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="39dp"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>
