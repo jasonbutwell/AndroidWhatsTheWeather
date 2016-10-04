@@ -5,7 +5,7 @@ package com.jasonbutwell.whatstheweather;
  */
 
 import android.os.AsyncTask;
-import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class DownloadJSONTask extends AsyncTask<String, Void, String> {
+public class DownloadJSONTask extends AsyncTask<String, Void, String>  {
 
     private URL url;
     private HttpURLConnection urlConnection = null;
@@ -25,11 +25,20 @@ public class DownloadJSONTask extends AsyncTask<String, Void, String> {
     private InputStreamReader reader;
     private StringBuilder contentBuilder;
 
+    private String message;
+    private TextView weatherTextView;
+
+    // Class constructor - so we can pass in the view that we need to update
+    public DownloadJSONTask( TextView view ) {
+        weatherTextView = view;
+        message = "";
+    }
+
     @Override
     protected String doInBackground(String... params) {
 
         try {
-            url = new URL(params[0]);
+            url = new URL( params[0] );
             urlConnection = (HttpURLConnection)url.openConnection();
 
             in = urlConnection.getInputStream();
@@ -52,27 +61,44 @@ public class DownloadJSONTask extends AsyncTask<String, Void, String> {
     }
 
     // called when do in background method has completed
-    protected void onPostExecute( String result ) {
+    protected void onPostExecute(String result ) {
         super.onPostExecute( result );
 
         try {
-            JSONObject jsonObject = new JSONObject(result);
+            if ( result != null )
+            {
+                JSONObject jsonObject = new JSONObject(result);
 
-            // locates the start of the weather array
-            String weatherInfo = jsonObject.getString("weather");
+                String name = jsonObject.getString("name");
 
-            // Parse the array
-            JSONArray arr = new JSONArray(weatherInfo);
+                // locates the start of the weather array
+                String weatherInfo = jsonObject.getString("weather");
 
-            for (int i = 0; i < arr.length(); i++ ) {
-                JSONObject jsonPart = arr.getJSONObject(i);
+                // Parse the array
+                JSONArray arr = new JSONArray(weatherInfo);
 
-                Log.i("main", jsonPart.getString("main"));
-                Log.i("description", jsonPart.getString("description"));
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject jsonPart = arr.getJSONObject(i);
+
+                    String main = jsonPart.getString("main");
+                    String description = jsonPart.getString("description");
+
+                    // if we have a main and a description, then set this to the message
+                    if (main != "" && description != "")
+                        message += "City: " + name + "\r\n" + main + ": " + description + "\r\n";
+                }
             }
+
+            // If message wasn't successfully set then the region wasn't found so set the message to reflect this
+            if ( message == "")
+                message = "Weather data not found for this region";
+
+            // update the view with our message
+            weatherTextView.setText(message);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 }
